@@ -18,6 +18,48 @@ public class StringManipulations {
         return reversed.toString();
     }
 
+    public static void reverseStringInteger (int x){
+        String s = String.valueOf(x);
+        boolean isMinus = '-' == (s.charAt(0));
+        if (isMinus){
+            s = s.substring(1, s.length()-1);
+        }
+        StringBuilder sb = new StringBuilder(s);
+        sb.reverse();
+        x = Integer.parseInt(sb.toString());
+        if (isMinus){
+            x = -x;
+        }
+    }
+
+    public int atoi(String s) {
+        int index = 0, total = 0, sign = 1;
+        s = s.trim(); // Remove leading and trailing whitespace
+
+        if (s.isEmpty()) return 0;
+
+        // Handle sign
+        if (s.charAt(index) == '+' || s.charAt(index) == '-') {
+            sign = s.charAt(index++) == '+' ? 1 : -1;
+        }
+
+        while (index < s.length()) {
+            // converts a character digit to its corresponding integer value
+            int digit = s.charAt(index) - '0';
+            if (digit < 0 || digit > 9) break;
+
+            // Check for overflow
+            if (total > Integer.MAX_VALUE / 10 || (total == Integer.MAX_VALUE / 10 && digit > Integer.MAX_VALUE % 10)) {
+                return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            }
+
+            total = total * 10 + digit;
+            index++;
+        }
+
+        return total * sign;
+    }
+
     public static boolean isPrime(int n) {
         if (n <= 1) return false;
         if (n == 2) return true;
