@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class PatternsToAceInterviews {
@@ -109,22 +110,16 @@ public class PatternsToAceInterviews {
 
 
 
-    public static class ListNode {
-        int val;
-        ListNode next;
-        ListNode() {}
-        ListNode(int val) { this.val = val; }
-        ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-     }
-
-    static boolean isPalindrome(ListNode head) {
+    // Fast and Slow pointers
+    // often used for cycle detection in linked lists
+    static boolean isPalindromeFastSlowPointers(ListNode head) {
         ListNode slow = head, fast = head;
         while (fast != null && fast.next != null){
             slow = head.next;
             fast = head.next.next;
         }
         fast = head;
-        slow  = reversed(slow);
+        slow  = reversedLinkedList(slow);
 
         while (slow != null){
             if (slow.val != fast.val) return false;
@@ -134,7 +129,7 @@ public class PatternsToAceInterviews {
         return true;
     }
 
-    private static ListNode reversed(ListNode head) {
+    private static ListNode reversedLinkedList(ListNode head) {
         ListNode prev = null;
         while (head != null){
             ListNode next = head.next;
@@ -144,4 +139,68 @@ public class PatternsToAceInterviews {
         }
         return prev;
     }
+
+
+    static List<int[]> mergeOverlap(int[][] arr) {
+
+        // Sort intervals based on start values
+        Arrays.sort(arr, Comparator.comparingInt(a -> a[0]));
+
+        List<int[]> res = new ArrayList<>();
+        res.add(new int[]{arr[0][0], arr[0][1]});
+
+        for (int i = 1; i < arr.length; i++) {
+            int[] last = res.get(res.size() - 1);
+            int[] curr = arr[i];
+
+            // If current interval overlaps with the last merged
+            // interval, merge them
+            if (curr[0] <= last[1])
+                last[1] = Math.max(last[1], curr[1]);
+            else
+                res.add(new int[]{curr[0], curr[1]});
+        }
+
+        return res;
+    }
+
+
+    // Cyclic sort
+    // move each element in the array to its correct position based on its value
+    // So for each number, say x, such that 1 <= x <= n, is placed at the (x – 1)th index
+
+    // find the first missing positive number
+    static int missingNumber(int[] arr) {
+        int n = arr.length;
+        for (int i = 0; i < n; i++) {
+
+            // if arr[i] is within the range [1, n] and arr[i]
+            // is not placed at (arr[i]-1)th index in arr
+            while (arr[i] >= 1 && arr[i] <= n
+                    && arr[i] != arr[arr[i] - 1]) {
+
+                // then swap arr[i] and arr[arr[i]-1] to
+                // place arr[i] to its corresponding index
+                int temp = arr[i];
+                arr[i] = arr[arr[i] - 1];
+                arr[temp - 1] = temp;
+            }
+        }
+
+        // If any number is not at its corresponding index
+        // then it is the missing number
+        for (int i = 1; i <= n; i++) {
+            if (i != arr[i - 1]) {
+                return i;
+            }
+        }
+
+        // If all number from 1 to n are present then n+1
+        // is smallest missing number
+        return n + 1;
+    }
+
+    // Tree BFS Breadth First Search
+
+
 }
