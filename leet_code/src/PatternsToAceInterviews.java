@@ -199,8 +199,4 @@ public class PatternsToAceInterviews {
         // is smallest missing number
         return n + 1;
     }
-
-    // Tree BFS Breadth First Search
-
-
 }
