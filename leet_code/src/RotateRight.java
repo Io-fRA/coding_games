@@ -1,5 +1,14 @@
 public class RotateRight {
 
+
+        public static void main(String[] args) {
+            String s1 = "hello";
+            String s2 = "hello";
+            System.out.println(s1 == s2);
+        }
+    
+
+
     public ListNode rotateRight(ListNode head, int k) {
 
         if (head == null || head.next == null || k == 0) {
